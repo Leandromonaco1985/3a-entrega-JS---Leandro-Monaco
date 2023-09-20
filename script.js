@@ -1,20 +1,101 @@
-
 //declaro variables globales
 let nombre, disparo, gambeta, tecnica, posicionamiento,estadoFisico, temperaturaPectoral, quite, arquero, promedio;
-
+// creo array para la lista de jugadores
+let listaJugadores = [];
+//creo arrays para equipos
+let equipo1 = [];
+let equipo2 = [];
 // función promediar habilidad de un jugador
-
 function promediarHabilidades(n1, n2, n3, n4, n5, n6, n7, n8){
 
   let promedio = (n1+n2+n3+n4+n5+n6+n7+n8)/8;
   return promedio.toFixed(1)
 
 }
-// creo array con la lista de jugadores
-let listaJugadores = [];
-//creo arrays para equipos
-let equipo1 = [];
-let equipo2 = [];
+//declaro funcion actualizar equipos
+function actualizarTablaEquipos() {
+  let tablaEquipo1 = document.getElementById("tablaEquipo1");
+  let tablaEquipo2 = document.getElementById("tablaEquipo2");
+
+  // Limpiar las tablas de los equipos
+  while (tablaEquipo1.rows.length > 1) {
+    tablaEquipo1.deleteRow(1);
+  }
+  while (tablaEquipo2.rows.length > 1) {
+    tablaEquipo2.deleteRow(1);
+  }
+
+  // Actualizar tabla del equipo 1
+  for (let i = 0; i < equipo1.length; i++) {
+    let fila = tablaEquipo1.insertRow();
+
+    let celdaNombre = fila.insertCell();
+    celdaNombre.innerHTML = equipo1[i].nombre;
+    
+    let celdaGambeta = fila.insertCell();
+    celdaGambeta.innerHTML = equipo1[i].gambeta
+
+    let celdaTecnica = fila.insertCell();
+        celdaTecnica.innerHTML = equipo1[i].tecnica;
+
+    let celdaDisparo = fila.insertCell();
+    celdaDisparo.innerHTML = equipo1[i].disparo;
+
+    let celdaEstadoFisico = fila.insertCell();
+    celdaEstadoFisico.innerHTML = equipo1[i].estadoFisico;
+
+    let celdaPosicionamiento = fila.insertCell();
+    celdaPosicionamiento.innerHTML = equipo1[i].posicionamiento;
+
+    let celdaTemperaturaPectoral = fila.insertCell();
+    celdaTemperaturaPectoral.innerHTML = equipo1[i].temperaturaPectoral;
+
+    let celdaQuite = fila.insertCell();
+    celdaQuite.innerHTML = equipo1[i].quite;
+
+    let celdaArquero = fila.insertCell();
+    celdaArquero.innerHTML = equipo1[i].arquero;
+
+    let celdaPromedioJugador = fila.insertCell();
+    celdaPromedioJugador.innerHTML = equipo1[i].promedio;
+  }
+
+  // Actualizar tabla del equipo 2
+  for (let i = 0; i < equipo2.length; i++) {
+    let fila = tablaEquipo2.insertRow();
+
+    let celdaNombre = fila.insertCell();
+    celdaNombre.innerHTML = equipo2[i].nombre;
+
+    let celdaGambeta = fila.insertCell();
+    celdaGambeta.innerHTML = equipo2[i].gambeta
+   
+    let celdaTecnica = fila.insertCell();
+    celdaTecnica.innerHTML = equipo2[i].tecnica;
+
+    let celdaDisparo = fila.insertCell();
+    celdaDisparo.innerHTML = equipo2[i].disparo;
+
+    let celdaEstadoFisico = fila.insertCell();
+    celdaEstadoFisico.innerHTML = equipo2[i].estadoFisico;
+
+    let celdaPosicionamiento = fila.insertCell();
+    celdaPosicionamiento.innerHTML = equipo2[i].posicionamiento;
+
+    let celdaTemperaturaPectoral = fila.insertCell();
+    celdaTemperaturaPectoral.innerHTML = equipo2[i].temperaturaPectoral;
+
+    let celdaQuite = fila.insertCell();
+    celdaQuite.innerHTML = equipo2[i].quite;
+
+    let celdaArquero = fila.insertCell();
+    celdaArquero.innerHTML = equipo2[i].arquero;
+
+    let celdaPromedioJugador = fila.insertCell();
+  celdaPromedioJugador.innerHTML = equipo2[i].promedio;
+
+  }
+}
 
 // creo función para agregar objeto "jugador" mediante un formulario
   function agregarJugador() {
@@ -39,7 +120,7 @@ let equipo2 = [];
       arquero = parseInt(arqueroInput.value);
       promedio = promediarHabilidades(disparo, gambeta, tecnica, posicionamiento, estadoFisico, temperaturaPectoral, quite, arquero);
 
-        // Verificar si los valores están dentro del rango permitido
+// Verifica si los valores seleccionados están dentro del rango permitido
   if (
     disparo >= 1 && disparo <= 10 &&
     gambeta >= 1 && gambeta <= 10 &&
@@ -62,7 +143,7 @@ let equipo2 = [];
       arquero: arquero,
       promedio: promedio
     };
-
+// Agrego el objeto jugador al array lista de jugadores
     listaJugadores.push(jugador);
     actualizarTabla();
     limpiarFormulario();
@@ -116,111 +197,145 @@ let equipo2 = [];
 
         let celdaPromedioJugador = fila.insertCell();
         celdaPromedioJugador.innerHTML = listaJugadores[i].promedio;
-
-        let celdaDropdown = fila.insertCell();
-        let dropdownHTML = `
-          <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton${i}" data-bs-toggle="dropdown" aria-expanded="false">
-              Seleccionar Equipo
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton${i}">
-              <li><a class="dropdown-item" href="#" onclick="moverAFila(${i}, 1)">Equipo 1</a></li>
-              <li><a class="dropdown-item" href="#" onclick="moverAFila(${i}, 2)">Equipo 2</a></li>
-            </ul>
-          </div>
-        `;
-        celdaDropdown.innerHTML = dropdownHTML;
+        let celdaSelEquipo= fila.insertCell();
+        let selEquipo = `
+  <div class="selEquipo">
+    <select id="equipo-${i}">
+      <option selected="true" value="1">Equipo 1</option>
+      <option value="2">Equipo 2</option>
+    </select>
+  </div>
+`;
+        celdaSelEquipo.innerHTML = selEquipo;
+        let celdaBtn = fila.insertCell();
+        let btnAgregar = `<button id="agregar-${i}">Agregar al equipo</button>`;
+        celdaBtn.innerHTML = btnAgregar;
+        const boton = document.getElementById(`agregar-${i}`);
+		  // Agrego evento al botón capturado.
+      boton.addEventListener("click", () => {
+        const equipo = document.getElementById(`equipo-${i}`).value;
+        agregarAlEquipo({ ...listaJugadores[i], equipo: equipo });
+		});
       }
       console.log()
       }
-    // Funciones para actualizar las tablas de los equipos
-function actualizarTablaDestino1() {
-  let tablaEquipo1 = document.getElementById("equipo1").getElementsByTagName("tbody");
-  while (tablaEquipo1.rows.length > 0) {
-    tablaEquipo1.deleteRow(0);
-  }
-  let fila = tablaEquipo1.insertRow();
 
+// Función para agregar jugador del array jugadores dispin al equipo seleccionado
+function agregarAlEquipo(jugador, equipo){
+// Primero  verificio que no este en uno de los 2 equipos y luego lo agrego al equipo seleccionado
+const buscoJugadorEquipo1 = equipo1.find(objeto => objeto.nombre == jugador.nombre);
+const buscoJugadorEquipo2 = equipo2.find(objeto => objeto.nombre == jugador.nombre);
+    if (buscoJugadorEquipo1 || buscoJugadorEquipo2 === true)  {
+      console.log("la variable busco jugador equipo 1 es: " + buscoJugadorEquipo1),
+      console.log("la variable busco jugador equipo 2 es: " + buscoJugadorEquipo2),
+     alert("El jugador ya forma parte de un equipo"),
+     console.log("Después de las comprobaciones, buscoJugadorEquipo1:", equipo2),
+     console.log("Después de las comprobaciones, buscoJugadorEquipo2:", equipo1)
+      }
+      else if (jugador.equipo === "1") {
+        equipo1.push(jugador);
+        actualizarTablaEquipos();
+        console.log("equipo 1 es: " + equipo1),
+        console.log("equipo2 es :" + equipo2),
+        console.log("la variable busco jugador equipo 1 es: " + buscoJugadorEquipo1),
+        console.log("la variable busco jugador equipo 2 es: " + buscoJugadorEquipo2)
+      } else if (jugador.equipo === "2") { 
+        equipo2.push(jugador);
+        actualizarTablaEquipos();
+        console.log("equipo 1 es: " + equipo1),
+        console.log("equipo2 es :" + equipo2),
+        console.log("la variable busco jugador equipo 1 es: " + buscoJugadorEquipo1),
+        console.log("la variable busco jugador equipo 2 es: " + buscoJugadorEquipo2)
+      }
+      actualizarTablaEquipos();
+  }
+  //actualizo la tabla de equipos
+actualizarTablaEquipos();
+//declaro funcion actualizar equipos
+function actualizarTablaEquipos() {
+  let tablaEquipo1 = document.getElementById("tablaEquipo1");
+  let tablaEquipo2 = document.getElementById("tablaEquipo2");
+
+  // Limpiar las tablas de los equipos
+  while (tablaEquipo1.rows.length > 1) {
+    tablaEquipo1.deleteRow(1);
+  }
+  while (tablaEquipo2.rows.length > 1) {
+    tablaEquipo2.deleteRow(1);
+  }
+
+  // Actualizar tabla del equipo 1
   for (let i = 0; i < equipo1.length; i++) {
-    
     let fila = tablaEquipo1.insertRow();
 
     let celdaNombre = fila.insertCell();
-    celdaNombre.innerHTML = tablaEquipo1[i].nombre;
-
+    celdaNombre.innerHTML = equipo1[i].nombre;
+    
     let celdaGambeta = fila.insertCell();
-    celdaGambeta.innerHTML = tablaEquipo1[i].gambeta;
+    celdaGambeta.innerHTML = equipo1[i].gambeta
 
     let celdaTecnica = fila.insertCell();
-    celdaTecnica.innerHTML = tablaEquipo1[i].tecnica;
+        celdaTecnica.innerHTML = equipo1[i].tecnica;
 
     let celdaDisparo = fila.insertCell();
-    celdaDisparo.innerHTML = tablaEquipo1[i].disparo;
+    celdaDisparo.innerHTML = equipo1[i].disparo;
 
     let celdaEstadoFisico = fila.insertCell();
-    celdaEstadoFisico.innerHTML = tablaEquipo1[i].estadoFisico;
+    celdaEstadoFisico.innerHTML = equipo1[i].estadoFisico;
 
     let celdaPosicionamiento = fila.insertCell();
-    celdaPosicionamiento.innerHTML = tablaEquipo1[i].posicionamiento;
+    celdaPosicionamiento.innerHTML = equipo1[i].posicionamiento;
 
     let celdaTemperaturaPectoral = fila.insertCell();
-    celdaTemperaturaPectoral.innerHTML = tablaEquipo1[i].temperaturaPectoral;
+    celdaTemperaturaPectoral.innerHTML = equipo1[i].temperaturaPectoral;
 
     let celdaQuite = fila.insertCell();
-    celdaQuite.innerHTML = tablaEquipo1[i].quite;
+    celdaQuite.innerHTML = equipo1[i].quite;
 
     let celdaArquero = fila.insertCell();
-    celdaArquero.innerHTML = tablaEquipo1[i].arquero;
+    celdaArquero.innerHTML = equipo1[i].arquero;
 
     let celdaPromedioJugador = fila.insertCell();
-    celdaPromedioJugador.innerHTML = tablaEquipo1[i].promedio;
-
-    // Crea y agrega las celdas con los datos del jugador a la tabla del equipo 1
-    // Puedes hacerlo de manera similar a como lo hiciste en actualizarTabla()
+    celdaPromedioJugador.innerHTML = equipo1[i].promedio;
   }
-}
 
-function actualizarTablaDestino2() {
-  let tablaEquipo2 = document.getElementById("equipo2").getElementsByTagName("tbody")[0];
-  // while (tablaEquipo2.rows.length > 0) {
-  //   tablaEquipo2.deleteRow(0);
-  // }
-  for (let i = 0; i < equipo2.length; i++) { 
+  // Actualizar tabla del equipo 2
+  for (let i = 0; i < equipo2.length; i++) {
     let fila = tablaEquipo2.insertRow();
 
     let celdaNombre = fila.insertCell();
-    celdaNombre.innerHTML = tablaEquipo2[i].nombre;
+    celdaNombre.innerHTML = equipo2[i].nombre;
 
     let celdaGambeta = fila.insertCell();
-    celdaGambeta.innerHTML = tablaEquipo2[i].gambeta;
-
+    celdaGambeta.innerHTML = equipo2[i].gambeta
+   
     let celdaTecnica = fila.insertCell();
-    celdaTecnica.innerHTML = tablaEquipo2[i].tecnica;
+    celdaTecnica.innerHTML = equipo2[i].tecnica;
 
     let celdaDisparo = fila.insertCell();
-    celdaDisparo.innerHTML = tablaEquipo2[i].disparo;
+    celdaDisparo.innerHTML = equipo2[i].disparo;
 
     let celdaEstadoFisico = fila.insertCell();
-    celdaEstadoFisico.innerHTML = tablaEquipo2[i].estadoFisico;
+    celdaEstadoFisico.innerHTML = equipo2[i].estadoFisico;
 
     let celdaPosicionamiento = fila.insertCell();
-    celdaPosicionamiento.innerHTML = tablaEquipo2[i].posicionamiento;
+    celdaPosicionamiento.innerHTML = equipo2[i].posicionamiento;
 
     let celdaTemperaturaPectoral = fila.insertCell();
-    celdaTemperaturaPectoral.innerHTML = tablaEquipo2[i].temperaturaPectoral;
+    celdaTemperaturaPectoral.innerHTML = equipo2[i].temperaturaPectoral;
 
     let celdaQuite = fila.insertCell();
-    celdaQuite.innerHTML = tablaEquipo2[i].quite;
+    celdaQuite.innerHTML = equipo2[i].quite;
 
     let celdaArquero = fila.insertCell();
-    celdaArquero.innerHTML = tablaEquipo2[i].arquero;
+    celdaArquero.innerHTML = equipo2[i].arquero;
 
     let celdaPromedioJugador = fila.insertCell();
-    celdaPromedioJugador.innerHTML = tablaEquipo2[i].promedio;
+  celdaPromedioJugador.innerHTML = equipo2[i].promedio;
 
   }
 }
-   
+
     //funcion limpiar formulario para reutilizar el formulario
     function limpiarFormulario() {
       document.getElementById("formularioJugador").reset();
@@ -230,40 +345,9 @@ function actualizarTablaDestino2() {
     document.getElementById("crearJugador").addEventListener("click", agregarJugador);
 
 
-//funcion para asignar jugadores a equipos
-function moverAFila(index, tablaDestino) {
-  let jugador = listaJugadores[index];
-  
-  if (tablaDestino === 1) {
-    equipo1.push(jugador);
-    actualizarTablaDestino1();
-  } else if (tablaDestino === 2) {
-    equipo2.push(jugador);
-    actualizarTablaDestino2();
-  }
-
-  // Eliminar la fila de la tabla original
-  listaJugadores.splice(index, 1);
-
   // Actualizar todas las tablas
   actualizarTabla();
-}
 
-// Modifica la función moverAFila
-function moverAFila(index, tablaDestino) {
-  let jugador = listaJugadores[index];
-
-  if (tablaDestino === 1) {
-    equipo1.push(jugador); // Agrega el objeto jugador completo a equipo1
-    actualizarTablaDestino1(); // Actualiza la tabla del equipo 1
-  } else if (tablaDestino === 2) {
-    equipo2.push(jugador); // Agrega el objeto jugador completo a equipo2
-    actualizarTablaDestino2(); // Actualiza la tabla del equipo 2
-  }
-
-  // Elimina la fila de la tabla original
-  listaJugadores.splice(index, 1);
 
   // Actualiza la tabla de jugadores
   actualizarTabla();
-}
