@@ -1,7 +1,18 @@
+//declaro objeto jugador
+let jugador;
 //declaro variables globales
 let nombre, disparo, gambeta, tecnica, posicionamiento,estadoFisico, temperaturaPectoral, quite, arquero, promedio;
 // creo array para la lista de jugadores
 let listaJugadores = [];
+//lo guardo en local storage
+const listaJugadoresLocalStorage = localStorage.getItem("lista de jugadores");
+
+if (listaJugadoresLocalStorage) {
+  listaJugadores = JSON.parse(listaJugadoresLocalStorage);
+} 
+ // Cargo listaJugadores desde el Local Storage
+actualizarTabla();
+
 //creo arrays para equipos
 let equipo1 = [];
 let equipo2 = [];
@@ -12,20 +23,24 @@ function promediarHabilidades(n1, n2, n3, n4, n5, n6, n7, n8){
   return promedio.toFixed(1)
 
 }
+//promediar sumas, se usará en comparación de equipos
+function promediarSumas(n1, n2){
+  let mediaHabilidad = (n1 + n2)/equipo1[i].length
+}
 //declaro funcion actualizar equipos
 function actualizarTablaEquipos() {
   let tablaEquipo1 = document.getElementById("tablaEquipo1");
   let tablaEquipo2 = document.getElementById("tablaEquipo2");
 
-  // Limpiar las tablas de los equipos
-  while (tablaEquipo1.rows.length > 1) {
-    tablaEquipo1.deleteRow(1);
+// Limpiar las tablas de los equipos
+while (tablaEquipo1.rows.length > 1) {
+        tablaEquipo1.deleteRow(1);
   }
-  while (tablaEquipo2.rows.length > 1) {
-    tablaEquipo2.deleteRow(1);
+while (tablaEquipo2.rows.length > 1) {
+        tablaEquipo2.deleteRow(1);
   }
 
-  // Actualizar tabla del equipo 1
+// Actualizar tabla del equipo 1
   for (let i = 0; i < equipo1.length; i++) {
     let fila = tablaEquipo1.insertRow();
 
@@ -68,8 +83,8 @@ function actualizarTablaEquipos() {
     celdaNombre.innerHTML = equipo2[i].nombre;
 
     let celdaGambeta = fila.insertCell();
-    celdaGambeta.innerHTML = equipo2[i].gambeta
-   
+    celdaGambeta.innerHTML = equipo2[i].gambeta;
+
     let celdaTecnica = fila.insertCell();
     celdaTecnica.innerHTML = equipo2[i].tecnica;
 
@@ -93,12 +108,11 @@ function actualizarTablaEquipos() {
 
     let celdaPromedioJugador = fila.insertCell();
   celdaPromedioJugador.innerHTML = equipo2[i].promedio;
-
   }
 }
 
 // creo función para agregar objeto "jugador" mediante un formulario
-  function agregarJugador() {
+function agregarJugador() {
       let nombreInput = document.getElementById("nombreInput");
       let disparoInput = document.getElementById("disparoInput");
       let gambetaInput = document.getElementById("gambetaInput");
@@ -143,13 +157,18 @@ function actualizarTablaEquipos() {
       arquero: arquero,
       promedio: promedio
     };
-// Agrego el objeto jugador al array lista de jugadores
-    listaJugadores.push(jugador);
-    actualizarTabla();
-    limpiarFormulario();
-    console.log(listaJugadores);
+/// Agrego el objeto jugador al array lista de jugadores
+listaJugadores.push(jugador);
+
+// Guardo la lista de jugadores en el Local Storage
+const listaJugadoresJSON = JSON.stringify(listaJugadores);
+localStorage.setItem("lista de jugadores", listaJugadoresJSON);
+  //actualizo
+  actualizarTabla();
+  limpiarFormulario();
+
   } else {
-    // Mostrar un mensaje de error o realizar otra acción cuando los valores estén fuera de rango.
+    // Mostrar un mensaje de error cuando los valores estén fuera de rango.
     alert("Los valores deben estar entre 1 y 10.");
   }
 }
@@ -220,18 +239,14 @@ function actualizarTablaEquipos() {
       console.log()
       }
 
-// Función para agregar jugador del array jugadores dispin al equipo seleccionado
-function agregarAlEquipo(jugador, equipo){
+// Función para agregar jugador del array jugadores al equipo seleccionado
+function agregarAlEquipo(jugador){
 // Primero  verificio que no este en uno de los 2 equipos y luego lo agrego al equipo seleccionado
-const buscoJugadorEquipo1 = equipo1.find(objeto => objeto.nombre == jugador.nombre);
-const buscoJugadorEquipo2 = equipo2.find(objeto => objeto.nombre == jugador.nombre);
-    if (buscoJugadorEquipo1 || buscoJugadorEquipo2 === true)  {
-      console.log("la variable busco jugador equipo 1 es: " + buscoJugadorEquipo1),
-      console.log("la variable busco jugador equipo 2 es: " + buscoJugadorEquipo2),
-     alert("El jugador ya forma parte de un equipo"),
-     console.log("Después de las comprobaciones, buscoJugadorEquipo1:", equipo2),
-     console.log("Después de las comprobaciones, buscoJugadorEquipo2:", equipo1)
-      }
+const buscoJugadorEquipo1 = equipo1.some(objeto => objeto.nombre == jugador.nombre);
+const buscoJugadorEquipo2 = equipo2.some(objeto => objeto.nombre == jugador.nombre);
+  if (buscoJugadorEquipo1 || buscoJugadorEquipo2) {
+     alert("El jugador ya forma parte de un equipo")
+     }
       else if (jugador.equipo === "1") {
         equipo1.push(jugador);
         actualizarTablaEquipos();
@@ -239,7 +254,8 @@ const buscoJugadorEquipo2 = equipo2.find(objeto => objeto.nombre == jugador.nomb
         console.log("equipo2 es :" + equipo2),
         console.log("la variable busco jugador equipo 1 es: " + buscoJugadorEquipo1),
         console.log("la variable busco jugador equipo 2 es: " + buscoJugadorEquipo2)
-      } else if (jugador.equipo === "2") { 
+      }
+       else if (jugador.equipo === "2") { 
         equipo2.push(jugador);
         actualizarTablaEquipos();
         console.log("equipo 1 es: " + equipo1),
@@ -335,7 +351,6 @@ function actualizarTablaEquipos() {
 
   }
 }
-
     //funcion limpiar formulario para reutilizar el formulario
     function limpiarFormulario() {
       document.getElementById("formularioJugador").reset();
@@ -344,10 +359,120 @@ function actualizarTablaEquipos() {
     //escucho el evento click en boton crear jugador 
     document.getElementById("crearJugador").addEventListener("click", agregarJugador);
 
-
   // Actualizar todas las tablas
   actualizarTabla();
 
-
   // Actualiza la tabla de jugadores
   actualizarTabla();
+
+
+
+/*------------------------------lógica para comparación de equipos---------------------------*/
+
+// TRABAJO EN PROCESO, A TERMINAR PARA EL FINAL, LO MISMO QUE EL BOTON PARA ELIMINAR JUGADORES DE CADA EQUIPO
+
+//capturo botón de html para procesar datos y crear informe
+let btnCompara = document.getElementById("btnCompara").addEventListener("click", comparacionEquipos);
+
+// declaro variables que almacenaran la suma de habilidades totales de los jugadores
+//primero para equipo 1
+let sumaGambetaE1 = 0;
+let sumaDisparoE1 = 0;
+let sumaTecnicaE1= 0;
+let sumaPosicionamientoE1 = 0;
+let sumaQuiteE1 = 0;
+let sumaArqueroE1 = 0;
+let sumaTemperaturaE1 = 0;
+let sumaEstadoFE1 = 0;
+let sumaPromedioE1 = 0;
+//ahora para el equipo2
+let sumaGambetaE2 = 0;
+let sumaDisparoE2 = 0;
+let sumaTecnicaE2= 0;
+let sumaPosicionamientoE2 = 0;
+let sumaQuiteE2 = 0;
+let sumaArqueroE2 = 0;
+let sumaTemperaturaE2 = 0;
+let sumaEstadoFE2 = 0;
+let sumaPromedioE2 = 0;
+//recorro los arrays de los equipos para sumar cada habilidad total por equipo 
+function comparacionEquipos(){
+  alert("// TRABAJO EN PROCESO, A TERMINAR PARA EL FINAL, LO MISMO QUE EL BOTON PARA ELIMINAR JUGADORES DE CADA EQUIPO")
+  // //me aseguro que los equipos tengan la misma cantidad de jugadores
+  // if(equipo1.length != equipo2.length){
+  //   alert("Los equipos no tienen la misma cantidad de jugadores")
+  // }
+  // else if (equipo1.length == equipo2.length){
+    
+
+  for (let i=0; i < equipo1.length; i++){
+    sumaGambetaE1 += equipo1[i].gambeta;
+  }
+  for (let i=0; i < equipo2.length; i++){
+    sumaGambetaE2 += equipo2[i].gambeta;
+  }
+  for (let i=0; i < equipo1.length; i++){
+    sumaDisparoE1 += equipo1[i].disparo;
+  }
+  for (let i=0; i < equipo2.length; i++){
+    sumaDisparoE2 += equipo2[i].disparo;
+  }
+  for (let i=0; i < equipo1.length; i++){
+    sumaTecnicaE1 += equipo1[i].tecnica;
+  }
+  for (let i=0; i < equipo2.length; i++){
+    sumaTecnicaE2 += equipo2[i].tecnica;
+  }
+  for (let i=0; i < equipo1.length; i++){
+    sumaEstadoFE1 += equipo1[i].estadoFisico;
+  }
+  for (let i=0; i < equipo2.length; i++){
+    sumaEstadoFE2 += equipo2[i].estadoFisico;
+  }
+  for (let i=0; i < equipo1.length; i++){
+    sumaPosicionamientoE1 += equipo1[i].posicionamiento;
+  }
+  for (let i=0; i < equipo2.length; i++){
+    sumaPosicionamientoE2 += equipo2[i].posicionamiento;
+  }
+  for (let i=0; i < equipo1.length; i++){
+    sumaTemperaturaE1 += equipo1[i].temperaturaPectoral;
+  }
+  for (let i=0; i < equipo2.length; i++){
+    sumaTemperaturaE2 += equipo2[i].temperaturaPectoral;
+  }
+  for (let i=0; i < equipo1.length; i++){
+    sumaQuiteE1 += equipo1[i].quite;
+  }
+  for (let i=0; i < equipo2.length; i++){
+    sumaQuiteE2 += equipo2[i].quite;
+  }
+  for (let i=0; i < equipo1.length; i++){
+    sumaArqueroE1 += equipo1[i].arquero;
+  }
+  for (let i=0; i < equipo2.length; i++){
+    sumaArqueroE2 += equipo2[i].arquero;
+  }
+  for (let i=0; i < equipo1.length; i++){
+    sumaPromedioE1 += equipo1[i].promedio;
+  }
+  for (let i=0; i < equipo2.length; i++){
+    sumaPromedioE2 += equipo2[i].promedio;
+  }
+
+//creo variables para englobar tipos de atributos y establecer comparaciones
+
+  let atrOfensivosE1 = (sumaDisparoE1 + sumaGambetaE1)/equipo1.length;
+ let atrTecnicosE1 = sumaTecnicaE1 + sumaGambetaE1;
+ let atrDefensivosE1 = sumaQuiteE1 + sumaArqueroE1;
+ let atrFisicosyMentalesE1 = sumaTemperaturaE1 + sumaEstadoFE1; 
+ let atrOfensivosE2 = sumaDisparoE2 + sumaGambetaE2;
+ let atrTecnicosE2 = sumaTecnicaE2 + sumaGambetaE2;
+ let atrDefensivosE2 = sumaQuiteE2 + sumaArqueroE2;
+ let atrFisicosyMentalesE2 = sumaTemperaturaE2 + sumaEstadoFE2; 
+
+ console.log("atrOfensivosE1", atrOfensivosE1);
+ console.log("sumaPromedioE1", sumaPromedioE1);
+ //, sumaDisparo, sumaTecnica, sumaPosicionamiento, sumaQuite, sumaArquero, sumaTemperatura, sumaEstadoF;
+
+}
